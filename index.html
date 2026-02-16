@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blockly Web App</title>
+  <link rel="stylesheet" href="./styles/styles.css">
+  <link rel="icon" type="image/x-icon" href="/media/icons/Blockly.ico">
+</head>
+<body class="dark-theme">
+  <div class="header">
+    <h1 data-i18n="UI_APP_TITLE">Blockly Web App</h1>
+
+    <div class="controls">
+      <div id="robotStatus" class="status-indicator hidden">
+        <span class="status-dot"></span>
+        <div id="rssiVisual" class="wifi-symbol" title="Signal Strength">
+          <div class="wifi-bar bar-1"></div>
+          <div class="wifi-bar bar-2"></div>
+          <div class="wifi-bar bar-3"></div>
+          <div class="wifi-bar bar-4"></div>
+        </div>
+        <span id="statusText" class="status-text" data-i18n="UI_STATUS_OFFLINE">Offline</span>
+      </div>
+
+      <button id="connectBtn" class="control-btn icon-left">
+        <span id="connectText" data-i18n="UI_CONNECT">Connect</span>
+      </button>
+
+      <div class="control-separator"></div>
+
+      <button id="runBtn" class="control-btn run icon-left">
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor" width="18px" height="18px">
+          <path d="M8 5v14l11-7z"></path>
+        </svg>
+        <label data-i18n="UI_RUN">Run</label>
+      </button>
+
+      <button id="stopBtn" class="control-btn stop icon-left">
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor" width="18px" height="18px">
+          <path d="M6 6h12v12H6z"></path>
+        </svg>
+        <label data-i18n="UI_STOP">Stop</label>
+      </button>
+
+      <button id="saveBtn" class="control-btn">
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor" width="18px" height="18px">
+          <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"></path>
+        </svg>
+        <label data-i18n="UI_SAVE">Save</label>
+      </button>
+
+      <button id="loadBtn" class="control-btn">
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor" width="18px" height="18px">
+          <path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"></path>
+        </svg>
+        <label data-i18n="UI_LOAD">Load</label>
+      </button>
+
+      <button id="toggleConsoleBtn" class="control-btn icon-btn">
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor" width="18px" height="18px">
+          <path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"></path>
+        </svg>
+      </button>
+
+      <button id="settingsBtn" class="control-btn icon-btn">
+        <svg class="btn-icon" viewBox="0 0 16 16" fill="currentColor" width="18px" height="18px">
+          <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0" />
+          <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="main-container">
+    <div id="blocklyDiv"></div>
+
+    <div id="output-area" class="output-container hidden">
+      <div class="output-tabs">
+        <button id="showJsonBtn" class="tab-btn" data-i18n="UI_BYTECODE">Bytecode</button>
+        <button id="showLogsBtn" class="tab-btn active" data-i18n="UI_LOGS">Logs</button>
+        <button id="showConsoleBtn" class="tab-btn" data-i18n="UI_CONSOLE">Console</button>
+        <div class="tab-spacer"></div>
+        <button id="clearLogBtn" class="tab-btn clear-btn" data-i18n="UI_CLEAR_LOGS">Clear Logs</button>
+      </div>
+
+      <pre id="jsonOutput"></pre>
+      <pre id="logOutput"></pre>
+      <pre id="consoleOutput"></pre>
+    </div>
+  </div>
+
+  <div id="settings-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <h2 data-i18n="UI_SETTINGS_TITLE">Settings</h2>
+
+      <div class="setting-item setting-item-column">
+        <label data-i18n="UI_ROBOT_CONFIG">Robot Configuration</label>
+        <div class="setting-input-group">
+          <label for="robot-id" data-i18n="UI_ROBOT_ID">Robot ID (Prefix):</label>
+          <input type="text" id="robot-id" value="robot_1">
+        </div>
+      </div>
+
+      <div class="setting-item setting-item-column">
+        <label data-i18n="UI_MQTT_CONNECTION">MQTT Connection</label>
+        <div class="setting-input-group">
+          <label for="broker" data-i18n="UI_BROKER">Broker:</label>
+          <input type="text" id="broker" value="localhost">
+          <label for="port" data-i18n="UI_PORT">Port:</label>
+          <input type="number" id="port" value="8000" style="width: 70px;">
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <label for="theme-switch" data-i18n="UI_THEME_DARK">Dark Mode</label>
+        <label class="toggle-switch">
+          <input type="checkbox" id="theme-switch" checked>
+          <span class="slider round"></span>
+        </label>
+      </div>
+
+      <div class="setting-item">
+        <label for="advanced-toggle" data-i18n="UI_SHOW_ADVANCED">Show Advanced Panels</label>
+        <label class="toggle-switch">
+          <input type="checkbox" id="advanced-toggle">
+          <span class="slider round"></span>
+        </label>
+      </div>
+
+      <div class="setting-item">
+        <label for="language-selector" data-i18n="UI_LANGUAGE_LABEL">Language</label>
+        <select id="language-selector">
+          <option value="en">English</option>
+          <option value="ms">Bahasa Melayu</option>
+          <option value="ar">العربية</option>
+        </select>
+      </div>
+
+      <button id="close-settings-btn" class="control-btn" data-i18n="UI_CLOSE">Close</button>
+    </div>
+  </div>
+
+  <div id="save-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <h2 data-i18n="UI_SAVE_TITLE">Save Workspace</h2>
+
+      <div class="setting-item setting-item-column">
+        <label for="save-filename-input" data-i18n="UI_SAVE_CONFIRM">Enter a name for your file:</label>
+        <div class="setting-input-group">
+          <input type="text" id="save-filename-input" value="program.xml">
+        </div>
+      </div>
+
+      <div class="modal-buttons">
+        <button id="save-modal-cancel-btn" class="control-btn" data-i18n="UI_CANCEL">Cancel</button>
+        <button id="save-modal-confirm-btn" class="control-btn run" data-i18n="UI_SAVE">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="confirm-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <h2 data-i18n="UI_CONFIRMATION_TITLE">Confirmation</h2>
+      <p id="confirm-modal-message" style="margin: 16px 0;"></p>
+
+      <div class="modal-buttons">
+        <button id="confirm-modal-cancel-btn" class="control-btn" data-i18n="UI_CANCEL">Cancel</button>
+        <button id="confirm-modal-confirm-btn" class="control-btn stop" data-i18n="UI_CONFIRM">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="alert-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <h2 data-i18n="UI_ALERT_TITLE">Alert!</h2>
+      <p id="alert-modal-message"></p>
+      <div class="modal-buttons">
+        <button id="alert-modal-ok-btn" class="modal-button-confirm" data-i18n="UI_OK">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="variable-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <h2 id="variable-modal-title" data-i18n="UI_VARIABLE_SETTINGS">Variable Settings</h2>
+
+      <div class="setting-item setting-item-column">
+        <label id="variable-modal-message">Variable Name:</label>
+        <div class="setting-input-group">
+          <input type="text" id="variable-name-input" value="">
+        </div>
+      </div>
+
+      <div class="modal-buttons">
+        <button id="variable-modal-cancel-btn" class="control-btn" data-i18n="UI_CANCEL">Cancel</button>
+        <button id="variable-modal-confirm-btn" class="control-btn run" data-i18n="UI_SAVE">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <xml id="toolbox" style="display: none">
+    <category name="%{BKY_CAT_BASICS}" colour="#5b80a5">
+      <block type="esp32_program"></block>
+      <block type="delay_ms">
+        <value name="MILLISECONDS">
+          <shadow type="math_number">
+            <field name="NUM">1000</field>
+          </shadow>
+        </value>
+      </block>
+    </category>
+
+    <category name="%{BKY_CAT_IO}" colour="#4a654f">
+      <block type="pin_mode">
+        <field name="PIN">23</field>
+      </block>
+      <block type="digital_write">
+        <field name="PIN">5</field>
+      </block>
+      <block type="digital_read">
+        <field name="PIN">23</field>
+      </block>
+      <block type="analog_write">
+        <field name="PIN">5</field>
+        <value name="VALUE">
+          <shadow type="math_number">
+            <field name="NUM">128</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="analog_read">
+        <field name="PIN">23</field>
+      </block>
+      <block type="switch_check"></block>
+    </category>
+
+    <category name="%{BKY_CAT_LOGIC}" colour="#5b80a5">
+      <block type="controls_if">
+        <value name="IF0">
+          <shadow type="switch_check">
+            <field name="SWITCH">33</field> <!-- PB1 -->
+            <field name="STATE">0</field>   <!-- Triggered -->
+          </shadow>
+        </value>
+      </block>
+
+      <block type="switch_check">
+        <field name="SWITCH">33</field>  <!-- PB1 -->
+        <field name="STATE">0</field>    <!-- Triggered -->
+      </block>
+
+      <block type="logic_compare">
+        <field name="OP">GT</field>
+        <value name="A">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+        <value name="B">
+          <shadow type="math_number">
+            <field name="NUM">5</field>
+          </shadow>
+        </value>
+      </block>
+
+      <block type="logic_operation">
+        <field name="OP">AND</field>
+        <value name="A">
+          <shadow type="switch_check">
+            <field name="SWITCH">33</field>
+            <field name="STATE">0</field>
+          </shadow>
+        </value>
+        <value name="B">
+          <shadow type="logic_boolean">
+            <field name="BOOL">TRUE</field>
+          </shadow>
+        </value>
+      </block>
+
+      <block type="logic_negate">
+        <value name="BOOL">
+          <shadow type="switch_check">
+            <field name="SWITCH">26</field> <!-- PB2 -->
+            <field name="STATE">0</field>
+          </shadow>
+        </value>
+      </block>
+
+      <block type="logic_boolean">
+        <field name="BOOL">TRUE</field>
+      </block>
+
+      <block type="logic_boolean">
+        <field name="BOOL">FALSE</field>
+      </block>
+
+    </category>
+
+
+    <category name="%{BKY_CAT_LOOPS}" colour="#5ba55b">
+      <block type="custom_repeat">
+        <value name="TIMES">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="custom_while_until"></block>
+      <block type="controls_for">
+        <value name="FROM">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+        <value name="TO">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+        <value name="BY">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_number"></block>
+      <block type="logic_compare"></block>
+      <block type="variables_get"></block>
+      <block type="custom_break"></block>
+    </category>
+
+    <category name="%{BKY_CAT_MATH}" colour="#5b67a5">
+      <block type="math_number">
+        <field name="NUM">0</field>
+      </block>
+      <block type="math_arithmetic">
+        <field name="OP">ADD</field>
+        <value name="A">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+        <value name="B">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_arithmetic">
+        <field name="OP">MINUS</field>
+        <value name="A">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+        <value name="B">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_arithmetic">
+        <field name="OP">MULTIPLY</field>
+        <value name="A">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+        <value name="B">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_arithmetic">
+        <field name="OP">DIVIDE</field>
+        <value name="A">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+        <value name="B">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_arithmetic">
+        <field name="OP">POWER</field>
+        <value name="A">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+        <value name="B">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_modulo">
+        <value name="DIVIDEND">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+        <value name="DIVISOR">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_map">
+        <value name="FROM_LOW">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+        <value name="FROM_HIGH">
+          <shadow type="math_number">
+            <field name="NUM">4095</field>
+          </shadow>
+        </value>
+        <value name="TO_LOW">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+        <value name="TO_HIGH">
+          <shadow type="math_number">
+            <field name="NUM">255</field>
+          </shadow>
+        </value>
+      </block>
+    </category>
+
+    <category name="%{BKY_CAT_VARIABLES}" colour="#E41B21" custom="VARIABLE"></category>
+    <category name="%{BKY_CAT_FUNCTIONS}" colour="#e91e63" custom="PROCEDURE"></category>
+
+    <category name="%{BKY_CAT_CONSOLE}" colour="#a55b80">
+      <block type="print_console">
+        <value name="VALUE">
+          <shadow type="text">
+            <field name="TEXT">Hello, world!</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="print_console">
+        <value name="VALUE">
+          <shadow type="math_number">
+            <field name="NUM">123</field>
+          </shadow>
+        </value>
+      </block>
+    </category>
+
+    <category name="%{BKY_CAT_SERVO}" colour="#22a6b3">
+      <block type="servo_attach">
+        <value name="SERVO_INDEX">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+          <field name="PIN">23</field>
+      </block>
+      <block type="servo_write">
+        <value name="SERVO_INDEX">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+        <value name="ANGLE">
+          <shadow type="math_angle">
+            <field name="NUM">90</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="servo_read">
+        <value name="SERVO_INDEX">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+      </block>
+    </category>
+
+    <category name="%{BKY_CAT_SENSORS}" colour="#ffa14a">
+      <block type="ultrasonic_read_cm">
+          <field name="TRIG_PIN">12</field>
+          <field name="ECHO_PIN">27</field>
+      </block>
+    </category>
+
+    <category name="%{BKY_CAT_OLED}" colour="#745ba5">
+      <block type="oled_init"></block>
+      <block type="oled_clear"></block>
+      <block type="oled_update"></block>
+      <block type="oled_set_cursor">
+        <value name="X">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+        <value name="Y">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="oled_print">
+        <value name="TEXT">
+          <shadow type="text">
+            <field name="TEXT">Hello!</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="oled_print">
+        <value name="TEXT">
+          <shadow type="math_number">
+            <field name="NUM">123</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="oled_set_text_size">
+        <value name="SIZE">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="oled_set_text_color"></block>
+      <block type="oled_draw_pixel">
+        <value name="X">
+          <shadow type="math_number">
+            <field name="NUM">64</field>
+          </shadow>
+        </value>
+        <value name="Y">
+          <shadow type="math_number">
+            <field name="NUM">32</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="oled_draw_line">
+        <value name="X1">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+        <value name="Y1">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+        <value name="X2">
+          <shadow type="math_number">
+            <field name="NUM">127</field>
+          </shadow>
+        </value>
+        <value name="Y2">
+          <shadow type="math_number">
+            <field name="NUM">63</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="oled_draw_rect">
+        <value name="X">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+        <value name="Y">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+        <value name="WIDTH">
+          <shadow type="math_number">
+            <field name="NUM">20</field>
+          </shadow>
+        </value>
+        <value name="HEIGHT">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="oled_fill_rect">
+        <value name="X">
+          <shadow type="math_number">
+            <field name="NUM">40</field>
+          </shadow>
+        </value>
+        <value name="Y">
+          <shadow type="math_number">
+            <field name="NUM">20</field>
+          </shadow>
+        </value>
+        <value name="WIDTH">
+          <shadow type="math_number">
+            <field name="NUM">30</field>
+          </shadow>
+        </value>
+        <value name="HEIGHT">
+          <shadow type="math_number">
+            <field name="NUM">15</field>
+          </shadow>
+        </value>
+      </block>
+    </category>
+
+    <category name="%{BKY_CAT_LEDS}" colour="#008080">
+      <!--<block type="led_init">
+        <value name="PIN">
+          <shadow type="math_number">
+            <field name="NUM">4</field>
+          </shadow>
+        </value>
+      </block>-->
+      <block type="led_set_pixel">
+        <value name="PIXEL_ID">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+        <value name="COLOR">
+          <shadow type="color_rgb"></shadow>
+        </value>
+      </block>
+      <block type="led_fill_all">
+        <value name="COLOR">
+          <shadow type="color_rgb">
+            <field name="R">0</field>
+            <field name="G">0</field>
+            <field name="B">255</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="led_set_brightness">
+        <value name="BRIGHTNESS">
+          <shadow type="math_number">
+            <field name="NUM">100</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="led_clear_all"></block>
+      <block type="led_show_changes"></block>
+      <block type="color_rgb"></block>
+    </category>
+
+    <category name="%{BKY_CAT_MOTORS}" colour="#a55b5b">
+      <label text="%{BKY_LBL_BLOCKING}"></label>
+      <block type="robot_move_cm">
+        <value name="DISTANCE">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="robot_turn_deg">
+        <field name="DIRECTION">RIGHT</field>
+        <value name="DEGREES">
+          <shadow type="math_angle">
+            <field name="NUM">90</field>
+          </shadow>
+        </value>
+      </block>
+      <label text="%{BKY_LBL_BASIC}"></label>
+      <block type="motor_set_speed">
+        <value name="SPEED">
+          <shadow type="math_number">
+            <field name="NUM">200</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="robot_stop"></block>
+      </category>
+
+      <category name="%{BKY_CAT_BUZZER}" colour =#D4AF37>
+        <block type = "buzzer_tone">
+          <value name="FREQ">
+            <shadow type="math_number">
+              <field name="NUM">400</field>
+            </shadow>
+          </value>
+        </block>
+        <block type = "buzzer_notone"></block>
+        <block type = "play_4_note_tune"></block>
+      </category>
+  </xml>
+
+  <input type="file" id="loadInput" style="display: none;" accept=".xml, .txt, .bvm">
+
+  <script type="module" src="src/main.js"></script>
+
+</body>
+</html>

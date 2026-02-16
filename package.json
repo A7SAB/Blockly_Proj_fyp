@@ -1,0 +1,49 @@
+{
+  "name": "blockly-robot-webapp",
+  "version": "1.0.2",
+  "main": "electron_main.js",
+  "description": "BlocklyApp",
+  "author": "Ahmed Salem",
+  "license": "ISC",
+  "keywords": [],
+  "scripts": {
+    "start": "electron .",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "dist": "electron-builder --win"
+  },
+  "build": {
+    "appId": "BlocklyApp.win32.test",
+    "files": [
+      "dist/**/*",       
+      "electron_main.js",
+      "preload.js",
+      "package.json",
+      "./media/icons/Blockly.ico",
+      "./media_blockly",
+      "./fonts"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "./media/icons/Blockly.ico"  
+    },
+    "nsis": {
+    "oneClick": false,         
+    "allowToChangeInstallationDirectory": true, 
+    "perMachine": false,       
+    "allowElevation": true,    
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true
+  }
+  },
+  "devDependencies": {
+    "electron": "^39.1.2",
+    "electron-builder": "^26.0.12",
+    "vite": "^6.4.1"
+  },
+  "dependencies": {
+    "blockly": "^12.3.1",
+    "mqtt": "^5.14.1"
+  }
+}

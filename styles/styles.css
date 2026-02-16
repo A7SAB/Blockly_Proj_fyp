@@ -1,0 +1,721 @@
+/*
+ * =========================================
+ * ROOT & THEME VARIABLES
+ * =========================================
+ */
+
+/**HTML fixes*/
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#blocklyDiv {
+  width: 100vw;
+  height: 100vh;
+}
+
+@media (pointer: coarse) and (min-width: 768px) {
+  #blocklyDiv {
+    transform: scale(0.9);
+    transform-origin: top left;
+  }
+}
+
+/*Fonts*/
+
+@font-face {
+  font-family: 'Cairo';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../fonts/Cairo-VariableFont_slnt,wght.woff') format('woff'); /* <--- Note the local path */
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  src: url('../fonts/Montserrat-VariableFont_wght.woff') format('woff');
+}
+
+:root {
+  /* Font variables for Blockly */
+  /*--blockly-font: Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;*/
+  --blockly-font: 'Montserrat', 'Cairo', sans-serif;
+  --blockly-weight: 600;
+
+  /* Light Theme (default) */
+  --primary-bg: #f4f7f6;
+  --secondary-bg: #ffffff;
+  --text-color: #1a202c;
+  --text-color-light: #4a5568;
+  --border-color: #e2e8f0;
+  --accent-color: #3182ce;
+  --button-hover: #2b6cb0;
+  --error-color: #e53e3e;
+  --success-color: #38a169;
+  --card-bg: #ffffff;
+  --shadow-color: rgba(0, 0, 0, 0.05);
+  --header-shadow: rgba(0, 0, 0, 0.1);
+  --input-bg: #edf2f7;
+  --warning-color: #f6ad55; /* Orange for Strength 2 */
+  --neutral-gray: #cbd5e0;  /* Gray for empty bars */
+}
+
+body.dark-theme {
+  /* Dark Theme */
+  --primary-bg: #1e1e1e;
+  --secondary-bg: #2d3748;
+  --text-color: #e2e8f0;
+  --text-color-light: #a0aec0;
+  --border-color: #4a5568;
+  --accent-color: #4299e1;
+  --button-hover: #63b3ed;
+  --error-color: #f56565;
+  --success-color: #68d391;
+  --card-bg: #252526;
+  --shadow-color: rgba(0, 0, 0, 0.4);
+  --header-shadow: rgba(0, 0, 0, 0.5);
+  --input-bg: #1a202c;
+}
+
+
+.blocklyText,
+.blocklyTreeLabel,
+.blocklyFlyoutLabelText,
+.blocklyToolboxCategoryLabel,
+.goog-menuitem-content {
+  font-family: var(--blockly-font) !important;
+  font-weight: var(--blockly-weight, 600) !important;
+  font-size: 14px;
+}
+
+
+/*
+ * =========================================
+ * KEYFRAME ANIMATIONS
+ * =========================================
+ */
+
+@keyframes pulse-green {
+  0% { box-shadow: 0 0 0 0 rgba(104, 211, 145, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(104, 211, 145, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(104, 211, 145, 0); }
+}
+
+@keyframes pulse-red {
+  0% { box-shadow: 0 0 0 0 rgba(245, 101, 101, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(245, 101, 101, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(245, 101, 101, 0); }
+}
+
+@keyframes pulse-blue {
+  0% { box-shadow: 0 0 0 0 rgba(66, 153, 225, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(66, 153, 225, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(66, 153, 225, 0); }
+}
+
+/*
+ * =========================================
+ * BASE & LAYOUT
+ * =========================================
+ */
+
+body {
+  font-family: var(--blockly-font);
+  font-weight: var(--blockly-weight);
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--primary-bg);
+  color: var(--text-color);
+  overflow: hidden;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.main-container {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+#blocklyDiv {
+  height: 100%;
+  width: 100%;
+}
+
+/*
+ * =========================================
+ * HEADER & BUTTONS
+ * =========================================
+ */
+
+.header {
+  padding: 10px 20px;
+  background-color: var(--secondary-bg);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  box-shadow: 0 1px 4px var(--header-shadow);
+  flex-shrink: 0;
+  z-index: 20;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 1.4em;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.header .controls,
+.header .mqtt-config {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* --- Base Button Styles --- */
+
+.control-btn
+,.modal-button-confirm {
+  padding: 8px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 100px; /* Pill shape */
+  background-color: var(--secondary-bg);
+  color: var(--text-color);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.control-btn:hover {
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+  background-color: var(--primary-bg);
+}
+
+.control-btn:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px var(--accent-color);
+}
+
+/* This is a lazy solution but I will fix it later (hopefully )*/
+.control-separator {
+  width: 1px;
+  height: 24px;
+  background-color: var(--color-border);
+  margin: 0 12px;
+}
+
+/* --- Icon Styles --- */
+
+.btn-icon {
+  fill: currentColor;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.control-btn.icon-left {
+  padding-left: 12px;
+}
+
+.control-btn.icon-btn {
+  padding: 8px;
+  width: 36px;
+  height: 36px;
+  font-size: 1.1em;
+}
+
+/* --- Specific Button Colors --- */
+
+.header button.run {
+  background-color: var(--success-color);
+  border-color: var(--success-color);
+  color: white;
+}
+.header button.run:hover {
+  background-color: #2f855a; /* Darker green */
+  border-color: #2f855a;
+  color: white;
+}
+
+.header button.stop {
+  background-color: var(--error-color);
+  border-color: var(--error-color);
+  color: white;
+}
+.header button.stop:hover {
+  background-color: #c53030; /* Darker red */
+  border-color: #c53030;
+  color: white;
+}
+
+/* --- Button Animations --- */
+
+.control-btn.is-running {
+  animation: pulse-green 1.2s ease-out;
+}
+.control-btn.is-stopping {
+  animation: pulse-red 1.2s ease-out;
+}
+
+/* --- Smart Connect Button --- */
+
+#connectBtn {
+  transition: background-color 0.2s; /* Smooth color swap only */
+  /* Default (Ready to Connect) = Green */
+  color: var(--text-color);
+}
+
+#connectBtn:hover {
+  background-color: var(--primary-bg);
+  border-color: var(--border-color);
+  color: var(--text-color);
+}
+
+#connectBtn.disconnected {
+  color: var(--text-color);
+  border-color: var(--border-color);
+
+}
+
+#connectBtn.connecting {
+  color: var(--accent-color);
+  animation: pulse-blue 1.5s infinite;
+}
+#connectBtn.connecting:hover {
+  color: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+#connectBtn.connected {
+  color: var(--error-color);
+
+  
+}
+#connectBtn.connected:hover {
+  color: var(--success---error-color);
+  border-color: var(--error-color);
+}
+
+/* * =========================================
+ * STATUS CONTAINER
+ * =========================================
+ */
+/* CONTAINER */
+.status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 14px;
+  background-color: var(--bg-color);
+  border-radius: 50px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  
+  /* Prevents the box from collapsing during transitions */
+  min-width: 80px; 
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+/* Hide initially to prevent FOUC (Flash of Unstyled Content) */
+.status-indicator.hidden {
+  display: none;
+}
+
+/* THE DOT */
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--neutral-gray);
+  flex-shrink: 0; /* Prevents dot from squishing */
+  transition: background-color 0.3s ease;
+}
+
+.status-dot.online {
+  background-color: var(--success-color);
+  box-shadow: 0 0 0 2px rgba(46, 204, 113, 0.2);
+}
+
+.status-dot.offline {
+  background-color: var(--error-color);
+  box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.2);
+}
+
+.status-dot.only_broker {
+  background-color: var(--warning-color, #f6ad55);
+  box-shadow: 0 0 5px var(--warning-color, #f6ad55);
+}
+
+/* THE WIFI SYMBOL (Container) */
+.wifi-symbol {
+  display: flex; /* Default: Visible */
+  align-items: flex-end;
+  gap: 3px;
+  height: 16px;
+  width: 26px;
+}
+
+.wifi-bar {
+  width: 4px;
+  flex-shrink: 0; 
+  background-color: var(--neutral-gray);
+  border-radius: 2px;
+  transition: background-color 0.2s ease;
+}
+
+/* Bar Heights */
+.wifi-bar.bar-1 { height: 25%; }
+.wifi-bar.bar-2 { height: 50%; }
+.wifi-bar.bar-3 { height: 75%; }
+.wifi-bar.bar-4 { height: 100%; }
+
+/* Colors based on strength class */
+.wifi-symbol.strength-1 .bar-1 { background-color: var(--error-color); }
+.wifi-symbol.strength-2 .bar-1, .wifi-symbol.strength-2 .bar-2 { background-color: var(--warning-color); }
+.wifi-symbol.strength-3 .bar-1, .wifi-symbol.strength-3 .bar-2, .wifi-symbol.strength-3 .bar-3 { background-color: var(--success-color); }
+.wifi-symbol.strength-4 .wifi-bar { background-color: var(--success-color); }
+
+/* THE OFFLINE TEXT LABEL */
+.status-text {
+  display: none; /* Default: Hidden */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dark);
+  line-height: 1;
+}
+
+/* =========================================
+   STATE SWITCHING LOGIC
+   ========================================= */
+
+/* When the parent container has class 'is-offline' */
+.status-indicator.is-offline .wifi-symbol {
+  display: none; /* Hide bars */
+}
+
+.status-indicator.is-offline .status-text {
+  display: block; /* Show Text */
+}
+
+
+/*
+ * =========================================
+ * FLOATING OUTPUT WINDOW
+ * =========================================
+ */
+
+#output-area.hidden {
+  display: none;
+}
+
+#output-area {
+  position: absolute;
+  top: 100px;
+  right: 20px;
+  width: 600px;
+  height: 350px;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 6px 12px var(--shadow-color);
+  z-index: 10;
+  border-radius: 8px;
+  overflow: hidden;
+  resize: both;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- Output Tabs --- */
+
+.output-tabs {
+  display: flex;
+  cursor: move;
+  flex-shrink: 0;
+  background-color: var(--primary-bg);
+  border-bottom: 1px solid var(--border-color);
+  padding-left: 5px;
+}
+
+.output-tabs button.tab-btn {
+  padding: 10px 15px;
+  border: none;
+  background-color: transparent;
+  color: var(--text-color-light);
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.9em;
+  transition: all 0.2s ease-in-out;
+  border-bottom: 3px solid transparent;
+}
+
+.output-tabs button.tab-btn:hover {
+  color: var(--text-color);
+}
+
+.output-tabs button.tab-btn.active {
+  background-color: var(--card-bg);
+  color: var(--accent-color);
+  border-bottom-color: var(--accent-color);
+  font-weight: 600;
+}
+
+.tab-spacer {
+  flex-grow: 1;
+}
+
+.output-tabs .clear-btn {
+  font-size: 0.8em;
+  color: var(--text-color-light);
+  margin-right: 5px;
+}
+.output-tabs .clear-btn:hover {
+  color: var(--error-color);
+  background-color: rgba(255, 0, 0, 0.1);
+}
+
+/* --- Output Content Panels --- */
+
+#jsonOutput, #logOutput, #consoleOutput {
+  flex-grow: 1;
+  margin: 0;
+  overflow-y: auto;
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  padding: 12px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.9em;
+  line-height: 1.4;
+  display: none;
+  direction: ltr !important;      /* Forces text direction left-to-right */
+  text-align: left !important;    /* Aligns text to the left */
+  unicode-bidi: isolate;          /* Prevents Arabic text context from messing up formatting */
+}
+
+.resize-handle {
+  right: 0 !important;
+  left: auto !important;
+}
+
+
+.draggable-panel, 
+#console-panel, 
+#settings-modal { 
+  /* In RTL, if both left and right are set, right wins. 
+     We must unset right to allow the JS drag logic (which sets left) to work. */
+  right: auto !important; 
+}
+
+
+
+/*
+ * =========================================
+ * SETTINGS MODAL
+ * =========================================
+ */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal-overlay.hidden {
+  display: none;
+}
+
+.modal-content {
+  background-color: var(--secondary-bg);
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 400px;
+}
+.modal-content h2 {
+  margin-top: 0;
+  color: var(--text-color);
+}
+
+/* Modal Bar*/
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+/* --- Modal Items --- */
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.setting-item-column {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+
+.setting-item label {
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.setting-input-group {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 8px;
+}
+
+.setting-input-group label {
+  font-size: 0.9em;
+  color: var(--text-color-light);
+}
+
+
+
+.setting-input-group input {
+  width: 100%;
+  box-sizing: border-box; /* ensures padding & border don’t overflow */
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  outline: none;
+}
+
+#close-settings-btn {
+  margin-top: 20px;
+  width: 100%;
+  padding: 10px;
+  /* Re-use control-btn styles but override colors */
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: white;
+  font-weight: bold;
+}
+#close-settings-btn:hover {
+  background-color: var(--button-hover);
+  border-color: var(--button-hover);
+  color: white;
+}
+
+/* --- Toggle Switch --- */
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 28px;
+}
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--border-color);
+  transition: .4s;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+}
+input:checked + .slider {
+  background-color: var(--accent-color);
+}
+input:checked + .slider:before {
+  transform: translateX(22px);
+}
+.slider.round {
+  border-radius: 34px;
+}
+.slider.round:before {
+  border-radius: 50%;
+}
+
+
+/*Fonts Cause I missed them up*/
+
+body, button, input, select, textarea, .modal-content {
+  font-family: var(--blockly-font), sans-serif; /* Uses the variable set by JS */
+}
+
+#consoleOutput, 
+#logOutput, 
+#jsonOutput, 
+pre, 
+code {
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace !important; /* Always monospace */
+  font-size: 14px; /* Optional: Adjust console size */
+}
+
+/* Target the category text specifically */
+.blocklyTreeLabel {
+  font-family: var(--blockly-font) !important;
+  font-weight: bold; /* Optional: Make categories stand out */
+  font-size: 14px;   /* Optional: Adjust size */
+}
+
+/* Target the Flyout buttons */
+.blocklyFlyoutButton .blocklyText {
+  font-family: var(--blockly-font) !important;
+}
+
+/* Target tooltips */
+.blocklyTooltipText {
+  font-family: var(--blockly-font) !important;
+}
+
+/* Target context menus (Right-click menu) */
+.blocklyWidgetDiv .goog-menuitem-content {
+  font-family: var(--blockly-font) !important;
+}
