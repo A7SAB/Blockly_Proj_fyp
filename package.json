@@ -21,7 +21,7 @@
       "preload.js",
       "package.json",
       ".public/media/icons/Blockly.ico",
-      ".public/media_blockly",
+      ".public/media/media_blockly",
       "./fonts"
     ],
     "win": {
