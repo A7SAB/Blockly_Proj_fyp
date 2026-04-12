@@ -7,7 +7,7 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
-    icon: path.join(__dirname, "./media/icons/Blockly.ico"), 
+    icon: path.join(__dirname, "./public/media/icons/Blockly.ico"), 
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
