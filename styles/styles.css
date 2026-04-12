@@ -32,14 +32,14 @@ html, body {
   font-family: 'Cairo';
   font-style: normal;
   font-weight: 400;
-  src: url('../fonts/Cairo-VariableFont_slnt,wght.woff') format('woff'); /* <--- Note the local path */
+  src: url('../public/fonts/Cairo-VariableFont_slntwght.woff') format('woff'); /* <--- Note the local path */
 }
 
 @font-face {
   font-family: 'Montserrat';
   font-style: normal;
   font-weight: 700;
-  src: url('../fonts/Montserrat-VariableFont_wght.woff') format('woff');
+  src: url('../public/fonts/Montserrat-VariableFont_wght.woff') format('woff');
 }
 
 :root {

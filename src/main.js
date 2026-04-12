@@ -156,7 +156,7 @@ function injectWorkspace(lang) {
       snap: true
     },
     trashcan: true,
-    media: '../media_blockly/'
+    media: '../public/media_blockly/'
   });
 
   // Re-attach listeners

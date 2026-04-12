@@ -29,11 +29,6 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Copy Blockly media into dist
-        run: |
-          mkdir -p dist/media_blockly
-          cp -r media_blockly/* dist/media_blockly/
-
       - name: Upload build artifact
         uses: actions/upload-pages-artifact@v3
         with:

@@ -20,13 +20,13 @@
       "electron_main.js",
       "preload.js",
       "package.json",
-      "./media/icons/Blockly.ico",
-      "./media_blockly",
+      ".public/media/icons/Blockly.ico",
+      ".public/media_blockly",
       "./fonts"
     ],
     "win": {
       "target": "nsis",
-      "icon": "./media/icons/Blockly.ico"  
+      "icon": "./public/media/icons/Blockly.ico"  
     },
     "nsis": {
     "oneClick": false,         
